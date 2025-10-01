@@ -20,6 +20,9 @@
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
+            "allowedCommonJsDependencies": [
+              "flatpickr/dist/l10n/ar.js"
+            ],
             "assets": [
               "src/favicon.ico",
               "src/assets"
