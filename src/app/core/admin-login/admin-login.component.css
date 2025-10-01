@@ -1,0 +1,189 @@
+/* روابط علوية */
+.top-links {
+  position: fixed;
+  inset-inline: 0;
+  top: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 28px;
+  z-index: 9999;
+}
+
+.top-links .text{
+    font-size: 16px;
+}
+
+.top-links .arrow{
+    font-size: 18px;
+}
+
+.nav-link {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 14px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  background: #406A84;
+  transition: transform 0.3s, background 0.3s, color 0.3s;
+}
+
+.nav-link:hover {
+  transform: translateY(-2px);
+  background: #fff;
+  color: #406A84;
+}
+
+
+
+/* container */
+.page{
+  width:100%;
+  /* max-width:520px; */
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:1rem;
+  margin:0 auto;
+  padding: 150px 0;
+  background-color: #406A84;
+  font-family: "Almarai", sans-serif; 
+}
+
+/* avatar (top circle) */
+.avatar{
+  width:78px;
+  height:78px;
+  border-radius:50%;
+  background: linear-gradient(180deg,#fbfbfb ,#f3f3f3);
+  display:grid;
+  place-items:center;
+  transform: translateY(-42px);
+  z-index:2;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.18);
+  border: 3px solid rgba(255,255,255,0.22);
+}
+.avatar svg{ width:36px; height:36px; display:block; fill:#406A84 }
+
+/* card (frosted glass / premium) */
+.card{
+  width:90%;
+  max-width: 520px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-radius: 14px;
+  padding: 64px 28px 28px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.14);
+  position:relative;
+  z-index:1;
+  border: 1px solid rgba(255,255,255,0.06);
+  overflow:hidden;
+}
+
+/* form layout */
+form{
+  display:flex;
+  gap:18px;
+  flex-direction:column;
+  align-items:stretch;
+  margin:0;
+}
+
+/* input wrapper */
+.input-wrap{ position:relative; }
+
+/* inputs (single rule for all used types) */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="url"],
+input[type="search"],
+input[type="tel"]{
+  width:100%;
+  height:65px;
+  padding: 14px 46px 14px 14px; /* أيقونة على اليمين (RTL) */
+  border: transparent;
+  color: #374151;
+  font-size:1.05rem;
+  outline:none;
+  font-size: 15px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: linear-gradient(180deg, #fff, rgba(255, 255, 255, 0.94));
+  box-shadow: 0 8px 20px rgba(18, 12, 9, 0.08);
+  box-sizing:border-box;
+  direction: rtl;       /* placeholder & النص RTL */
+  text-align: right;    /* يضع placeholder من اليمين لليسار */
+}
+
+/* placeholder style (works in most browsers) */
+input::placeholder{ color: rgba(55,65,81,0.45); }
+input::-webkit-input-placeholder{ text-align:right; }
+input::-moz-placeholder{ text-align:right; }
+
+/* focus */
+input:focus{
+  transform: translateY(-2px);
+  border-color: #406A84;
+}
+
+/* icon inside field (right side for RTL) */
+.input-wrap .icon{
+  position:absolute;
+  top:50%;
+  right:12px;
+  transform:translateY(-50%);
+  width:24px;
+  height:24px;
+  display:inline-grid;
+  place-items:center;
+  color: #406A84;
+  opacity:0.98;
+}
+
+.input-wrap .icon svg{ fill:currentColor; display:block; }
+
+/* primary button (premium style) */
+.btn{
+  margin-top:6px;
+  padding: 12px 26px;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #fff;
+  background: linear-gradient(180deg, #295c7c, #406A84);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  cursor:pointer;
+  align-self:center;
+  min-width:260px;
+  height:65px;
+  transition: background .3s ease-in-out, box-shadow .3s ease-in-out, color .3s ease-in-out;
+}
+.btn:hover{ background: linear-gradient(180deg, #eceaea, #fff);
+    color: #406A84;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18); }
+
+/* small note/footer */
+.note{ text-align:center; margin-top:12px; font-size:13px; color: rgba(55,65,81,0.48); }
+
+/* responsive tweaks */
+@media (max-width:420px){
+  body{ padding:28px 12px; }
+  .card{ padding:56px 16px 20px; border-radius:12px; }
+  .avatar{ width:64px; height:64px; transform: translateY(-34px); }
+  input[type="text"], input[type="password"], input[type="email"], input[type="tel"]{ padding:12px 46px 12px 12px; height:58px; }
+  .btn{ min-width:140px; padding:10px 18px; height:58px; }
+}
+
+/* notes:
+ - شلت قواعد SASS ($variables, nesting) وبقيت CSS صالحة مباشرة.
+ - لو تحب أغيّر لوحة الألوان مرة تانية (أغمق/أفتح أو أستبدل accent), قولي اللون اللي تحبّه و أعدّله فورًا.
+*/

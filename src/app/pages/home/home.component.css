@@ -1,0 +1,275 @@
+/* ====== HERO: صورة يمين، المحتوى يسار ====== */
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: 100vh;
+  width: 100%;
+  align-items: stretch;
+  position: relative;
+  font-family: "Almarai", sans-serif; 
+}
+
+/* LEFT: المحتوى */
+.hero-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 3rem;
+  z-index: 3;
+  position: relative;
+}
+.card-hero {
+  width: 100%;
+  max-width: 640px;
+  text-align: center;
+  padding: 2rem 1.2rem;
+  border-radius: 16px;
+  background: transparent;
+}
+
+/* عناوين ونص */
+.clinic-name {
+  font-size: 50px;
+  font-weight: 800;
+  color: #406A84;
+  margin-bottom: 2rem;
+  line-height: 1.03;
+}
+.desc {
+  max-width: 42ch;
+  margin: 0 auto;
+  color: #6b7b88;
+  line-height: 1.8;
+  font-weight: 600;
+  margin-bottom: 1.4rem;
+  font-size: clamp(0.95rem, 1.6vw, 1.02rem);
+  text-align: center;
+}
+
+.desc2{
+    color: #6b7b88;
+}
+
+/* أزرار */
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+  margin-bottom: 1.2rem;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1.4rem;
+  border-radius: 999px;
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, color 160ms ease;
+  will-change: transform, box-shadow;
+}
+
+/* PRIMARY */
+.btn-primary {
+  background: linear-gradient(180deg, #295c7c, #406A84);
+  color: #fff;
+  box-shadow: 0 8px 30px rgba(138, 90, 66, 0.12);
+  min-width: 140px;
+  border: transparent;
+  transition: all 0.3s ease-in-out;
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 40px rgba(27,62,87,0.18);
+  filter: brightness(0.98);
+  background: linear-gradient(180deg, #eceaea, #fff);
+  color: #406A84;
+  outline: none;
+}
+.btn-primary:active {
+  transform: translateY(-1px) scale(0.997);
+  box-shadow: 0 6px 18px rgba(27,62,87,0.12);
+}
+
+/* OUTLINE */
+.btn-outline {
+  background: linear-gradient(180deg, #eceaea, #fff);
+  border: 1px solid #eceaea;
+  color: #406A84;
+  min-width: 140px;
+  font-weight: 700;
+  transition: all 0.3s ease-in-out;
+}
+.btn-outline:hover,
+.btn-outline:focus,
+.btn-outline:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 22px rgba(59,107,122,0.08);
+  background: linear-gradient(180deg, #295c7c, #406A84);
+  color:#ffffff;
+  outline: none;
+}
+.btn-outline:active {
+  transform: translateY(-1px) scale(0.998);
+  box-shadow: 0 6px 12px rgba(59,107,122,0.06);
+}
+
+/* visible focus ring for keyboard users */
+.btn:focus-visible {
+  box-shadow: 0 0 0 4px rgba(59,107,122,0.12), 0 10px 30px rgba(0,0,0,0.08);
+}
+
+/* RIGHT: منطقة الصورة */
+.hero-media {
+  position: relative;
+  overflow: hidden;
+  min-height: 520px;
+  background: #ffffff;
+}
+.hero-media .img {
+  position: absolute;
+  inset: 0;
+  background-image: url(../../../assets/images/test.jpg);
+  background-size: cover;
+  background-position: center center;
+  transform: scale(1.03);
+  transition: transform 0.8s ease;
+  z-index: 1;
+  filter: saturate(0.96) contrast(1.02);
+  transform-origin: center;
+  will-change: transform;
+}
+
+/* تدرج أبيض لدمج الصورة مع الخلفية */
+.hero-media::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: linear-gradient(
+    to left,
+    rgba(255,255,255,1) 0%,
+    rgba(255,255,255,0.95) 8%,
+    rgba(255,255,255,0.8) 16%,
+    rgba(255,255,255,0.55) 28%,
+    rgba(255,255,255,0.25) 44%,
+    rgba(255,255,255,0.06) 62%,
+    rgba(255,255,255,0) 100%
+  );
+}
+.hero-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: radial-gradient(900px 300px at 90% 50%, rgba(255,255,255,0.12), rgba(255,255,255,0) 40%);
+  mix-blend-mode: normal;
+}
+
+/* تكبير لطيف على الشاشات الكبيرة */
+@media (min-width: 1001px) {
+  .hero-media .img:hover {
+    transform: scale(1.05);
+    transition: transform 0.9s cubic-bezier(0.2,0.8,0.2,1);
+  }
+}
+
+/* ====== Responsive: tablet / phone ====== */
+@media (max-width: 1000px) {
+  .hero { grid-template-columns: 1fr; min-height: 60vh; }
+
+  /* نجعل الصورة فوق المحتوى (mobile) لكن تظل تملأ الحاوية */
+  .hero-media { order: -1; min-height: 36vh; height: 36vh; }
+  .hero-media .img {
+    position: absolute;
+    inset: 0;
+    background-position: right center;
+    transform: none;
+  }
+
+  .hero-content { padding: 2rem; }
+  .clinic-name { font-size:30px; }
+  .desc { font-size: clamp(0.95rem, 1.6vw, 1.02rem); }
+  .hero-actions { gap: 0.75rem; }
+  .btn { min-width: 0; padding: 0.65rem 1rem; }
+}
+@media (max-width: 700px) {
+  .hero-content { padding: 1.4rem; }
+  .hero-actions { flex-direction: column; gap: 0.6rem; align-items: stretch; }
+  .btn { width: 100%; max-width: 100%; font-size: 0.95rem; border-radius: 12px; }
+  .card-hero { padding: 1.2rem; border-radius: 12px; }
+}
+
+/* ====== Social / map area ====== */
+.social-media {
+  padding: 40px 100px;
+  box-sizing: border-box;
+}
+.social-media .wrap {
+  max-width:  1200px;
+  margin: 0 auto;
+  text-align: center;
+  padding-inline: 1rem;
+}
+.social-media .icons {
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+  align-items: center;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.social-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #fbfbfb;
+  text-decoration: none;
+  transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.08);
+}
+.social-btn svg { width: 22px; height: 22px; fill: #6b7b88; display: block; }
+.social-btn:focus { outline: 3px solid rgba(0,0,0,0.12); outline-offset: 3px; }
+.social-btn:hover { transform: translateY(-4px) scale(1.03); background: #ffffff; box-shadow: 0 8px 18px rgba(0,0,0,0.12); }
+
+.social-media .login {
+  display: block;
+  margin: 8px auto 6px;
+  font-size: 19px;
+  font-weight: 600;
+  color: #6b7b88;
+  text-decoration: none;
+  opacity: 0.9;
+}
+.social-media .login:hover { text-decoration: underline; }
+.social-media .copyright { font-size: 11px; color: rgba(0,0,0,0.6); margin-top: 6px; }
+
+/* responsive social icons */
+@media (max-width: 800px) {
+  .social-media { padding: 60px 28px; }
+  .social-btn { width: 56px; height: 56px; }
+  .social-btn svg { width: 20px; height: 20px; }
+}
+@media (max-width: 420px) {
+  .social-media { padding: 40px 18px; }
+  .social-media .icons { gap: 14px; }
+  .social-btn { width: 48px; height: 48px; }
+  .social-btn svg { width: 18px; height: 18px; }
+}
+
+/* ====== Accessibility / reduced motion prefs ====== */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+  .hero-media .img, .hero-media .img:hover { transform: none !important; transition: none !important; }
+}
+
+/* ====== Utilities ====== */
+.card-hero, .hero-content, .social-media .wrap { max-width:  1200px; }

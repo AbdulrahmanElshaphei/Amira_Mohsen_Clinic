@@ -1,0 +1,52 @@
+<!-- src/app/pages/info-details/info-details.component.html -->
+
+  <nav class="top-links d-flex justify-content-between w-100 mb-4">
+    <a class="nav-link nav-left d-flex align-items-center" routerLink="/info">
+      <span class="arrow me-1">→</span>
+      <span class="text">استعلام جديد</span>
+    </a>
+    <a class="nav-link nav-right d-flex align-items-center" routerLink="/home">
+      <span class="text">الرئيسية</span>
+      <span class="arrow ms-1">←</span>
+    </a>
+  </nav>
+
+
+
+
+<div class="booking-container d-flex flex-column align-items-center justify-content-center text-center w-100 p-3">
+
+
+
+  <div class="contain-all w-100" style="max-width: 500px;">
+    <h4 class="page-title fw-bold mb-4">تفاصيل الحجز</h4>
+
+    <div *ngIf="loading" class="alert alert-info">جاري تحميل البيانات...</div>
+    <div *ngIf="errorMessage && !loading" class="alert alert-danger">{{ errorMessage }}</div>
+
+    <div *ngIf="booking && !loading" class="card booking-card shadow-lg w-100">
+      <div class="card-body">
+        <div class="date-info mb-3 d-flex justify-content-center gap-2 align-items-center">
+          <i class="fa-solid fa-calendar-days "></i>
+          <p class="mb-0 fw-bold ">{{ booking.date.split('T')[0] }}</p>
+        </div>
+
+        <h5 class="fw-bold mb-2">{{ booking.patientName }}</h5>
+        <p class="phone text-muted mb-2" dir="ltr">{{ booking.phone }}</p>
+        <p class="queue mb-2 fw-bolder fs-4">رقم الدور: <span class="fw-bold fs-5">{{ booking.queueNumber }}</span></p>
+        <p class="time mb-2 fw-bolder fs-4">الوقت المتوقع: <span class="fw-bold fs-5" style="direction: ltr; unicode-bidi: embed;">{{ booking.estimatedTime | date:'shortTime' }}</span></p>
+
+        <p class="status mb-0">
+          الحالة:
+          <span [ngClass]="{
+              'text-success fw-bold': booking.status === 'Completed',
+              'text-danger fw-bold': booking.status === 'Cancelled',
+              'text-warning fw-bold': booking.status === 'Waiting'
+            }">
+            {{ booking.status }}
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

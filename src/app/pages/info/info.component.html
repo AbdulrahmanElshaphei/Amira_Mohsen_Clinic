@@ -1,0 +1,58 @@
+  <nav class="top-links">
+    <a class="nav-link nav-left" routerLink="/booking">
+      <span class="arrow">→</span>
+      <span class="text">احجز الآن</span>
+    </a>
+    <a class="nav-link nav-right" routerLink="/home">
+      <span class="text">الرئيسية</span>
+      <span class="arrow">←</span>
+    </a>
+  </nav>
+
+
+
+<main class="page" aria-labelledby="track-title">
+
+
+
+  <div class="avatar" aria-hidden="true">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 12a4 4 0 100-8 4 4 0 000 8zm0 2c-4.418 0-8 2.686-8 6v1h16v-1c0-3.314-3.582-6-8-6z" />
+    </svg>
+  </div>
+
+  <section class="card" aria-label="نموذج استعلام برقم الهاتف">
+    <h2 id="track-title" class="visually-hidden">استعلام عن الحجز</h2>
+
+    <form (ngSubmit)="search()" #infoForm="ngForm" novalidate>
+
+      <!-- رقم الهاتف -->
+      <div class="input-wrap">
+        <input type="tel" name="phoneNumber" [(ngModel)]="phoneNumber" placeholder="رقم الهاتف" aria-label="رقم الهاتف"
+          required />
+        <span class="icon"><i class="fa-solid fa-phone"></i></span>
+      </div>
+
+      <!-- التاريخ -->
+      <div class="input-wrap position-relative">
+        <input id="dateInput" type="text" name="date" [(ngModel)]="date" placeholder="اختر تاريخ الحجز" aria-label="تاريخ الحجز" required
+          class="form-control pe-5" />
+
+        <span class="icon position-absolute top-50 end-0 translate-middle-y me-3">
+          <i class="fa-solid fa-calendar-days"></i>
+        </span>
+      </div>
+
+
+
+
+
+
+      <!-- زرار -->
+      <button type="submit" class="btn" [disabled]="!infoForm.valid" aria-label="استعلام">
+        استعلام
+      </button>
+    </form>
+  </section>
+
+</main>

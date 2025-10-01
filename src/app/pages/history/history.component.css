@@ -1,0 +1,141 @@
+/* روابط علوية */
+.top-links {
+  font-family: "Almarai", sans-serif;
+  position: fixed;
+  inset-inline: 0;
+  top: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 28px;
+  z-index: 9999;
+}
+
+.top-links .text{
+    font-size: 16px;
+}
+
+.top-links .arrow{
+    font-size: 18px;
+}
+
+.nav-link {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 14px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  background: #406A84;
+  transition: transform 0.3s, background 0.3s, color 0.3s;
+}
+
+.nav-link:hover {
+  transform: translateY(-2px);
+  background: #fff;
+  color: #406A84;
+}
+
+
+
+
+.history-section {
+  font-family: "Almarai", sans-serif;
+  background: #406A84;
+  padding: 100px 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.history-section h4 {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.history-section .btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+/* الجدول يفضل Scrollable على الشاشات الصغيرة */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* في الشاشات الصغيرة */
+@media (max-width: 768px) {
+  .history-section .d-flex {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .history-section .btn,
+  .history-section input {
+    width: 100%;
+  }
+}
+
+
+
+.card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 10px 12px;
+  margin-top: 6px;
+  box-shadow: 0 2px 8px rgba(12, 23, 33, 0.04);
+  overflow-x: auto;
+  /* مهم عشان الجدول مايتكسرش */
+}
+
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+  /* يمنع الجدول من الكسر على الموبايل */
+}
+
+
+thead th {
+  font-size: 13px;
+  color: #8b97a6;
+  text-align: right;
+  padding: 14px 20px;
+  border-bottom: 1px solid #eef3f6;
+}
+
+
+tbody tr {
+  background: transparent;
+}
+
+tbody td {
+  padding: 18px 20px;
+  border-bottom: 1px solid #f3f7f9;
+  vertical-align: middle;
+}
+
+tbody tr:hover {
+  background: linear-gradient(90deg, rgba(14, 165, 163, 0.02), transparent);
+}
+
+
+
+.dashboard-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* يوسّط أفقياً */
+  /* padding-top: 20px; */
+}
+
+.count-box {
+  width: 250px;
+  text-align: center;
+}

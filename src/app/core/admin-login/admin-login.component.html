@@ -1,0 +1,64 @@
+<main class="page" aria-labelledby="login-title">
+
+  <!-- روابط سريعة -->
+  <nav class="top-links">
+    <a class="nav-link nav-left" routerLink="/booking">
+      <span class="arrow">→</span>
+      <span class="text">احجز الآن</span>
+    </a>
+    <a class="nav-link nav-right" routerLink="/home">
+      <span class="text">الرئيسية</span>
+      <span class="arrow">←</span>
+    </a>
+  </nav>
+
+  <!-- أيقونة -->
+  <div class="avatar" aria-hidden="true">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 12a4 4 0 100-8 4 4 0 000 8zm0 2c-4.418 0-8 2.686-8 6v1h16v-1c0-3.314-3.582-6-8-6z" />
+    </svg>
+  </div>
+
+  <!-- كارد تسجيل الدخول -->
+  <section class="card" aria-label="نموذج تسجيل دخول">
+    <h2 id="login-title" class="visually-hidden">
+      تسجيل دخول
+    </h2>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+
+      <!-- اسم المستخدم -->
+      <div class="input-wrap">
+        <input type="text" formControlName="username" placeholder="اسم المستخدم" aria-label="اسم المستخدم" required />
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 12a4 4 0 100-8 4 4 0 000 8zm0 2c-4.418 0-8 2.686-8 6v1h16v-1c0-3.314-3.582-6-8-6z" />
+          </svg>
+        </span>
+      </div>
+
+      <!-- كلمة المرور -->
+      <div class="input-wrap">
+        <input id="password" type="password" formControlName="password" placeholder="كلمة المرور"
+          aria-label="كلمة المرور" required />
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M17 8h-1V6a4 4 0 10-8 0v2H7a1 1 0 00-1 1v10a1 1 0 001 1h10a1 1 0 001-1V9a1 1 0 00-1-1zM9 6a3 3 0 116 0v2H9V6z" />
+          </svg>
+        </span>
+      </div>
+
+      <!-- زر الدخول -->
+      <button type="submit" class="btn" aria-label="تسجيل دخول" [disabled]="loading || loginForm.invalid">
+        {{ loading ? 'جاري الدخول...' : 'تسجيل دخول' }}
+      </button>
+
+      <!-- رسالة الخطأ -->
+      <div *ngIf="errorMessage" class="error-msg">
+        ⚠️ {{ errorMessage }}
+      </div>
+    </form>
+  </section>
+
+</main>

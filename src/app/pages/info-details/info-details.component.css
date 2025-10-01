@@ -1,0 +1,121 @@
+/* روابط علوية */
+.top-links {
+  font-family: "Almarai", sans-serif;
+  position: fixed;
+  inset-inline: 0;
+  top: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 28px;
+  z-index: 9999;
+}
+
+.top-links .text{
+    font-size: 16px;
+}
+
+.top-links .arrow{
+    font-size: 18px;
+}
+
+.nav-link {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 14px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  background: #406A84;
+  transition: transform 0.3s, background 0.3s, color 0.3s;
+}
+
+.nav-link:hover {
+  transform: translateY(-2px);
+  background: #fff;
+  color: #406A84;
+}
+
+.booking-container {
+  min-height: 70vh;
+  background-color: #406a84;
+  padding: 20px; /* padding علشان الكارد مايلزقش ف الحواف */
+  font-family: "Almarai", sans-serif; 
+}
+
+.fa-solid{
+  color: #406A84;
+}
+
+.booking-card {
+  background: #fff;
+  border-radius: 12px;
+  max-width: 100%;
+  margin: auto;
+  padding: 20px;
+}
+
+.contain-all{
+    width: 400px;
+}
+
+/* الألوان */
+.page-title{
+  color: #fff;
+  text-align: center;
+  font-size: 30px;
+}
+
+.booking-card h5 {
+  color: #406a84;
+  font-size: 30px;
+}
+
+.date-info i {
+  font-size: 18px;
+  color: #406a84; /* نفس لون الثيم */
+}
+
+.date-info p {
+  color: #6b7b88; /* نفس لون الثيم */
+}
+
+.booking-card .phone {
+  font-size: 16px;
+  font-weight: 500;
+  color: #6b7b88;
+}
+
+.booking-card .waiting {
+  color: #406a84;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+/* موبايل */
+@media (max-width: 576px) {
+  .booking-card {
+    max-width: 100%;
+    padding: 15px;
+  }
+
+  .booking-card h4 {
+    font-size: 18px;
+  }
+
+  .booking-card h5 {
+    font-size: 16px;
+  }
+
+  .booking-card .phone,
+  .booking-card .waiting {
+    font-size: 14px;
+  }
+
+  .booking-container {
+  min-height: 100vh;
+}
+}
