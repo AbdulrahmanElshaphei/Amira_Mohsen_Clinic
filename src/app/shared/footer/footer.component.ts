@@ -9,5 +9,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './footer.component.css'
 })
 export class FooterComponent {
-
+  openFacebook() {
+    window.open('https://web.facebook.com/mimmisa.mohsen', '_blank');
+  }
 }
