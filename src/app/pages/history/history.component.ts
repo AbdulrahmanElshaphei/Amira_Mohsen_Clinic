@@ -45,7 +45,7 @@ export class HistoryComponent implements OnInit {
       },
       error: (err) => {
         console.error('❌ Error loading appointments', err);
-        this.toastr.error('فشل تحميل سجل المواعيد');
+        this.toastr.error('لا يوجد حجوزات في الأرشيف لليوم المطلوب');
       }
     });
   }
