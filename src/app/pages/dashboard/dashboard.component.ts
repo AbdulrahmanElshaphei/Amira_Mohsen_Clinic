@@ -58,7 +58,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.rescheduledAppointmentsDay = JSON.parse(saved);
     }
     // 🟢 بعد تحميل المؤجلة نفحص مين جه يومه ونضيفه للجدول الأساسي
-    this.checkRescheduledAppointments();
+    // this.checkRescheduledAppointments();
 
   }
 
@@ -121,7 +121,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
             return (a.queueNumber || 0) - (b.queueNumber || 0);
           });
 
-        this.checkRescheduledAppointments(); // 🟢
+        // this.checkRescheduledAppointments(); // 🟢
         this.loading = false;
       },
       error: (err) => {
@@ -154,7 +154,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         const msg =
           err?.error?.details ||   // 👈 الرسالة المترجمة من الـ API
           err?.error?.message ||   // 👈 fallback
-          'حدث خطأ أثناء استكمال الكشف';
+          'لا يمكن انهاء الموعد في يوم مختلف عن موعده';
         this.toastr.error(msg);
       }
 
@@ -426,50 +426,50 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
 
 
-  checkRescheduledAppointments() {
-    const today = new Date();
-    const todayStr = today.getFullYear() + "-" +
-      String(today.getMonth() + 1).padStart(2, '0') + "-" +
-      String(today.getDate()).padStart(2, '0');
+  // checkRescheduledAppointments() {
+  //   const today = new Date();
+  //   const todayStr = today.getFullYear() + "-" +
+  //     String(today.getMonth() + 1).padStart(2, '0') + "-" +
+  //     String(today.getDate()).padStart(2, '0');
 
-    const dueAppointments = this.rescheduledAppointmentsDay.filter(a => {
-      const appointmentDate = a.estimatedTime.substring(0, 10);
-      return appointmentDate === todayStr;
-    });
+  //   const dueAppointments = this.rescheduledAppointmentsDay.filter(a => {
+  //     const appointmentDate = a.estimatedTime.substring(0, 10);
+  //     return appointmentDate === todayStr;
+  //   });
 
-    if (dueAppointments.length > 0) {
-      const mappedAppointments: Appointment[] = dueAppointments.map(a => {
-        const dateObj = new Date(a.estimatedTime);
+  //   if (dueAppointments.length > 0) {
+  //     const mappedAppointments: Appointment[] = dueAppointments.map(a => {
+  //       const dateObj = new Date(a.estimatedTime);
 
-        // ✅ نخلي التاريخ بالصيغة العربية (٣٠‏/٩‏/٢٠٢٥)
-        const arabicDate = dateObj.toLocaleDateString("ar-EG");
 
-        return {
-          id: a.id,
-          patientName: a.patientName,
-          phone: a.phone,
-          date: arabicDate,   // ✅ التاريخ الجديد
-          queueNumber: a.queueNumber,
-          estimatedTime: a.estimatedTime,
-          status: 'Waiting',
-          appointmentType: a.appointmentType === "contract" ? "تعاقد" : "كشف",
-        };
-      });
+  //       const arabicDate = dateObj.toLocaleDateString("ar-EG");
 
-      this.rows = [...this.rows, ...mappedAppointments];
+  //       return {
+  //         id: a.id,
+  //         patientName: a.patientName,
+  //         phone: a.phone,
+  //         date: arabicDate,
+  //         queueNumber: a.queueNumber,
+  //         estimatedTime: a.estimatedTime,
+  //         status: 'Waiting',
+  //         appointmentType: a.appointmentType === "contract" ? "تعاقد" : "كشف",
+  //       };
+  //     });
 
-      this.rescheduledAppointmentsDay = this.rescheduledAppointmentsDay.filter(
-        a => !dueAppointments.some(d => d.id === a.id)
-      );
+  //     this.rows = [...this.rows, ...mappedAppointments];
 
-      localStorage.setItem(
-        'rescheduledAppointmentsDay',
-        JSON.stringify(this.rescheduledAppointmentsDay)
-      );
+  //     this.rescheduledAppointmentsDay = this.rescheduledAppointmentsDay.filter(
+  //       a => !dueAppointments.some(d => d.id === a.id)
+  //     );
 
-      console.log("✅ تم نقل المواعيد للجدول الأساسي:", mappedAppointments);
-    }
-  }
+  //     localStorage.setItem(
+  //       'rescheduledAppointmentsDay',
+  //       JSON.stringify(this.rescheduledAppointmentsDay)
+  //     );
+
+  //     console.log("✅ تم نقل المواعيد للجدول الأساسي:", mappedAppointments);
+  //   }
+  // }
 
 
 

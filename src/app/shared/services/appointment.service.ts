@@ -11,6 +11,7 @@ import { ChangeDayStatusRequest, ChangeDayStatusResponse } from '../interfaces/c
 import { RescheduleRequest, RescheduleResponse } from '../interfaces/reschedule';
 import { RescheduleAppointment } from '../interfaces/appointmentmodel';
 import { HistoryResponse } from '../interfaces/history';
+import { DeleteHistoryResponse } from '../interfaces/delete-history';
 
 @Injectable({
   providedIn: 'root'
@@ -220,6 +221,21 @@ getHistoryAppointments(token: string, date?: string): Observable<HistoryResponse
   return this.http.get<HistoryResponse>(this.historyUrl, { headers, params });
 }
 
+
+
+
+
+private deleteUrl = 'https://amiramohsenclinic.com/api/Dashboard/appointments/archive';
+
+// 🟢 مسح بيانات يوم معين
+deleteAppointmentsByDate(token: string, date: string): Observable<DeleteHistoryResponse> {
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token}`
+  });
+
+  const url = `${this.deleteUrl}?date=${date}`;
+  return this.http.delete<DeleteHistoryResponse>(url, { headers });
+}
 
 
 

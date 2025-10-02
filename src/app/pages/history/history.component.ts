@@ -82,13 +82,27 @@ export class HistoryComponent implements OnInit {
 
 
 
-  // 🟢 مسح بيانات اليوم (ممكن يتظبط مع API بعدين)
+  // 🟢 مسح بيانات يوم معين (من السيرفر)
   clearTodayData(): void {
     if (!this.selectedDate) {
       this.toastr.warning('⚠️ اختر التاريخ لمسح بياناته');
       return;
     }
-    this.filteredAppointments = [];
-    this.toastr.success('🗑️ تم مسح بيانات اليوم بنجاح');
+
+    const token = localStorage.getItem('adminToken') || '';
+
+    this.appointmentService.deleteAppointmentsByDate(token, this.selectedDate).subscribe({
+      next: (res) => {
+        this.toastr.success(`🗑️ ${res.message}`);
+        // تفريغ البيانات المعروضة بعد المسح
+        this.filteredAppointments = [];
+        this.totalCount = 0;
+      },
+      error: (err) => {
+        console.error('❌ Error deleting appointments', err);
+        this.toastr.error('فشل مسح بيانات اليوم');
+      }
+    });
   }
+
 }
