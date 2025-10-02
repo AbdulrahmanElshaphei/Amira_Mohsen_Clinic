@@ -42,6 +42,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   selectedRows = new Set<number>();
   loading = false;
   errorMessage = '';
+  totalCount: number = 0;
 
   constructor(
     private appointmentService: AppointmentService,
@@ -53,30 +54,35 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.loadAppointments();
     this.checkWeeklyAlert();
     const saved = localStorage.getItem('rescheduledAppointmentsDay');
-  if (saved) {
-    this.rescheduledAppointmentsDay = JSON.parse(saved);
-  }
-  // 🟢 بعد تحميل المؤجلة نفحص مين جه يومه ونضيفه للجدول الأساسي
-  this.checkRescheduledAppointments();
+    if (saved) {
+      this.rescheduledAppointmentsDay = JSON.parse(saved);
+    }
+    // 🟢 بعد تحميل المؤجلة نفحص مين جه يومه ونضيفه للجدول الأساسي
+    this.checkRescheduledAppointments();
 
   }
+
 
   // 🔹 جلب المواعيد
   loadAppointments(): void {
     this.loading = true;
     this.appointmentService.getAppointments().subscribe({
       next: (data) => {
-        this.rows = data
+        // ✅ ناخد الـ appointments من الـ object
+        this.totalCount = data.count;
+        const appointments = data.appointments;
+
+        this.rows = appointments
           .map(app => {
             let timeOnly = '';
             let dateOnly = '';
             let appDate: Date | null = null;
             let appTime: Date | null = null;
 
-            // 🕒 معالجة الوقت (وخزنه كـ Date للمقارنة)
+            // 🕒 معالجة الوقت
             if (app.estimatedTime) {
               const d = new Date(app.estimatedTime);
-              appTime = d; // ✅ نخزن الـ Date الأصلي للمقارنة
+              appTime = d;
 
               let hours = d.getHours();
               const minutes = d.getMinutes().toString().padStart(2, '0');
@@ -99,7 +105,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
               estimatedTime: timeOnly,
               date: dateOnly,
               _rawDate: appDate,
-              _rawTime: appTime // ✅ نخزن الوقت هنا عشان نرتّب عليه
+              _rawTime: appTime
             };
           })
           .sort((a, b) => {
@@ -108,15 +114,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
             if (dateA !== dateB) return dateA - dateB;
 
-            // 🕒 لو التاريخ واحد نرتّب على حسب الوقت
             const timeA = a._rawTime?.getTime() || 0;
             const timeB = b._rawTime?.getTime() || 0;
             if (timeA !== timeB) return timeA - timeB;
 
-            // 🔢 لو الوقت كمان متساوي نرتّب على حسب الدور
             return (a.queueNumber || 0) - (b.queueNumber || 0);
           });
-this.checkRescheduledAppointments(); // 🟢 هنا
+
+        this.checkRescheduledAppointments(); // 🟢
         this.loading = false;
       },
       error: (err) => {
@@ -125,6 +130,7 @@ this.checkRescheduledAppointments(); // 🟢 هنا
       }
     });
   }
+
 
 
 
@@ -382,88 +388,88 @@ this.checkRescheduledAppointments(); // 🟢 هنا
 
 
 
-// 🟢 متغيرات جديدة للتأجيل ليوم آخر
-selectedAppointmentIdOtherDay!: number;
-newDateOtherDay!: string;
-rescheduledAppointmentsDay: RescheduleAppointment[] = [];
+  // 🟢 متغيرات جديدة للتأجيل ليوم آخر
+  selectedAppointmentIdOtherDay!: number;
+  newDateOtherDay!: string;
+  rescheduledAppointmentsDay: RescheduleAppointment[] = [];
 
-rescheduleOtherDay(): void {
-  if (!this.selectedAppointmentIdOtherDay || !this.newDateOtherDay) {
-    this.toastr.warning('⚠️ من فضلك اختر الموعد وحدد اليوم الجديد');
-    return;
-  }
+  rescheduleOtherDay(): void {
+    if (!this.selectedAppointmentIdOtherDay || !this.newDateOtherDay) {
+      this.toastr.warning('⚠️ من فضلك اختر الموعد وحدد اليوم الجديد');
+      return;
+    }
 
-  const payload: RescheduleRequest = {
-    appointmentId: this.selectedAppointmentIdOtherDay,
-    newTime: this.newDateOtherDay
-  };
+    const payload: RescheduleRequest = {
+      appointmentId: this.selectedAppointmentIdOtherDay,
+      newTime: this.newDateOtherDay
+    };
 
-  const token = localStorage.getItem('adminToken') || '';
+    const token = localStorage.getItem('adminToken') || '';
 
-  this.appointmentService.rescheduleAppointmentDay(payload, token).subscribe({
-  next: (res) => {
-    this.toastr.success('✅ تم تأجيل الموعد بنجاح');
-    console.log('📥 Reschedule Response:', res);
+    this.appointmentService.rescheduleAppointmentDay(payload, token).subscribe({
+      next: (res) => {
+        this.toastr.success('✅ تم تأجيل الموعد بنجاح');
+        console.log('📥 Reschedule Response:', res);
 
-    // ✨ أضف النتيجة مباشرة في الجدول
-    this.rescheduledAppointmentsDay.push(res);
-    localStorage.setItem('rescheduledAppointmentsDay', JSON.stringify(this.rescheduledAppointmentsDay));
-  },
-  error: (err) => {
-    console.error('❌ Reschedule API Error:', err);
-    const msg = err?.error?.message || 'حدث خطأ أثناء تأجيل الموعد';
-    this.toastr.error(msg);
-  }
-});
-
-}
-
-
-
-checkRescheduledAppointments() {
-  const today = new Date();
-  const todayStr = today.getFullYear() + "-" +
-    String(today.getMonth() + 1).padStart(2, '0') + "-" +
-    String(today.getDate()).padStart(2, '0');
-
-  const dueAppointments = this.rescheduledAppointmentsDay.filter(a => {
-    const appointmentDate = a.estimatedTime.substring(0, 10); 
-    return appointmentDate === todayStr;
-  });
-
-  if (dueAppointments.length > 0) {
-    const mappedAppointments: Appointment[] = dueAppointments.map(a => {
-      const dateObj = new Date(a.estimatedTime);
-
-      // ✅ نخلي التاريخ بالصيغة العربية (٣٠‏/٩‏/٢٠٢٥)
-      const arabicDate = dateObj.toLocaleDateString("ar-EG");
-
-      return {
-        id: a.id,
-        patientName: a.patientName,
-        phone: a.phone,
-        date: arabicDate,   // ✅ التاريخ الجديد
-        queueNumber: a.queueNumber,
-        estimatedTime: a.estimatedTime,
-        status: 'Waiting',
-        appointmentType: a.appointmentType === "contract" ? "تعاقد" : "كشف",
-      };
+        // ✨ أضف النتيجة مباشرة في الجدول
+        this.rescheduledAppointmentsDay.push(res);
+        localStorage.setItem('rescheduledAppointmentsDay', JSON.stringify(this.rescheduledAppointmentsDay));
+      },
+      error: (err) => {
+        console.error('❌ Reschedule API Error:', err);
+        const msg = err?.error?.message || 'حدث خطأ أثناء تأجيل الموعد';
+        this.toastr.error(msg);
+      }
     });
 
-    this.rows = [...this.rows, ...mappedAppointments];
-
-    this.rescheduledAppointmentsDay = this.rescheduledAppointmentsDay.filter(
-      a => !dueAppointments.some(d => d.id === a.id)
-    );
-
-    localStorage.setItem(
-      'rescheduledAppointmentsDay',
-      JSON.stringify(this.rescheduledAppointmentsDay)
-    );
-
-    console.log("✅ تم نقل المواعيد للجدول الأساسي:", mappedAppointments);
   }
-}
+
+
+
+  checkRescheduledAppointments() {
+    const today = new Date();
+    const todayStr = today.getFullYear() + "-" +
+      String(today.getMonth() + 1).padStart(2, '0') + "-" +
+      String(today.getDate()).padStart(2, '0');
+
+    const dueAppointments = this.rescheduledAppointmentsDay.filter(a => {
+      const appointmentDate = a.estimatedTime.substring(0, 10);
+      return appointmentDate === todayStr;
+    });
+
+    if (dueAppointments.length > 0) {
+      const mappedAppointments: Appointment[] = dueAppointments.map(a => {
+        const dateObj = new Date(a.estimatedTime);
+
+        // ✅ نخلي التاريخ بالصيغة العربية (٣٠‏/٩‏/٢٠٢٥)
+        const arabicDate = dateObj.toLocaleDateString("ar-EG");
+
+        return {
+          id: a.id,
+          patientName: a.patientName,
+          phone: a.phone,
+          date: arabicDate,   // ✅ التاريخ الجديد
+          queueNumber: a.queueNumber,
+          estimatedTime: a.estimatedTime,
+          status: 'Waiting',
+          appointmentType: a.appointmentType === "contract" ? "تعاقد" : "كشف",
+        };
+      });
+
+      this.rows = [...this.rows, ...mappedAppointments];
+
+      this.rescheduledAppointmentsDay = this.rescheduledAppointmentsDay.filter(
+        a => !dueAppointments.some(d => d.id === a.id)
+      );
+
+      localStorage.setItem(
+        'rescheduledAppointmentsDay',
+        JSON.stringify(this.rescheduledAppointmentsDay)
+      );
+
+      console.log("✅ تم نقل المواعيد للجدول الأساسي:", mappedAppointments);
+    }
+  }
 
 
 
@@ -478,7 +484,7 @@ checkRescheduledAppointments() {
 
 
 
-  
+
 
 
 

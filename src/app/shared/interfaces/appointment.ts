@@ -8,3 +8,8 @@ export interface Appointment {
   status: 'Waiting' | 'Completed' | 'Cancelled';
   appointmentType: 'تعاقد' | 'كشف';
 }
+
+export interface DashboardResponse {
+  count: number;
+  appointments: Appointment[];
+}

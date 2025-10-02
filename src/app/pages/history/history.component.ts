@@ -1,32 +1,94 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import * as XLSX from 'xlsx';
+import { HistoryAppointment, HistoryResponse } from '../../shared/interfaces/history';
+import { AppointmentService } from '../../shared/services/appointment.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
+
 @Component({
   selector: 'app-history',
   standalone: true,
-  imports: [RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './history.component.html',
-  styleUrl: './history.component.css'
+  styleUrls: ['./history.component.css']
 })
-export class HistoryComponent {
-   data = [
-    { name: 'عبدالرحمن محمد', phone: '+201124859707', time: '9:19 PM', date: '2025/9/28', visitType: 'Contract', queue: 1 },
-    { name: 'عبدالرحمن محمد', phone: '+201124859708', time: '9:43 PM', date: '2025/9/28', visitType: 'Checkup', queue: 2 },
-  ];
+export class HistoryComponent implements OnInit {
+  appointments: HistoryAppointment[] = [];
+  filteredAppointments: HistoryAppointment[] = [];
+  selectedDate: string = '';
+  totalCount: number = 0;
 
-  exportToExcel() {
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.data);
+  constructor(
+    private appointmentService: AppointmentService,
+    private toastr: ToastrService
+  ) { }
+
+  ngOnInit(): void {
+    // ✅ ضبط التاريخ الافتراضي على النهاردة
+    const today = new Date().toISOString().split('T')[0];
+    this.selectedDate = today;
+
+    // ✅ نجيب بيانات اليوم من الـ API
+    this.loadAppointments(this.selectedDate);
+  }
+
+  // 🟢 تحميل الحجوزات من السيرفر (مع فلترة بالتاريخ)
+  loadAppointments(date?: string): void {
+    const token = localStorage.getItem('adminToken') || '';
+    this.appointmentService.getHistoryAppointments(token, date).subscribe({
+      next: (res: HistoryResponse) => {
+        this.appointments = res.appointments;
+        this.filteredAppointments = res.appointments;
+        this.totalCount = res.count; // ✅ ناخد الكونت اللي جاي من السيرفر
+      },
+      error: (err) => {
+        console.error('❌ Error loading appointments', err);
+        this.toastr.error('فشل تحميل سجل المواعيد');
+      }
+    });
+  }
+
+  // 🟢 فلترة بالتاريخ (تستدعي API مباشرة)
+  filterByDate(): void {
+    if (!this.selectedDate) {
+      this.toastr.warning('⚠️ اختر التاريخ أولا');
+      return;
+    }
+    this.loadAppointments(this.selectedDate);
+  }
+
+  // 🟢 بحث بالاسم أو الهاتف (لوكال بس)
+  searchAppointments(query: string): void {
+    this.filteredAppointments = this.appointments.filter(a =>
+      a.patientName.includes(query) || a.phone.includes(query)
+    );
+  }
+
+  // 🟢 تصدير Excel
+  exportToExcel(): void {
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.filteredAppointments);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Appointments');
 
-    // 📅 تاريخ اليوم
-    const today = new Date();
-    const formattedDate = today.toISOString().split('T')[0]; 
-    // النتيجة بتبقى بالشكل: 2025-09-29
-
-    // 📝 اسم الملف + التاريخ
-    const fileName = `appointments_${formattedDate}.xlsx`;
+    // ✅ لو فيه selectedDate استخدمه، لو مش موجود fallback لتاريخ النهاردة
+    const fileDate = this.selectedDate || new Date().toISOString().split('T')[0];
+    const fileName = `appointments-history-${fileDate}.xlsx`;
 
     XLSX.writeFile(wb, fileName);
+    this.toastr.success('✅ تم تصدير البيانات إلى Excel');
+  }
+
+
+
+  // 🟢 مسح بيانات اليوم (ممكن يتظبط مع API بعدين)
+  clearTodayData(): void {
+    if (!this.selectedDate) {
+      this.toastr.warning('⚠️ اختر التاريخ لمسح بياناته');
+      return;
+    }
+    this.filteredAppointments = [];
+    this.toastr.success('🗑️ تم مسح بيانات اليوم بنجاح');
   }
 }

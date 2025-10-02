@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Appointment } from '../interfaces/appointment';
+import { Appointment, DashboardResponse } from '../interfaces/appointment';
 import { AuthService } from './auth.service';
 import { AppointmentInfo } from '../interfaces/appointment-info';
 import { ClinicHours } from '../interfaces/clinic-hours';
@@ -10,6 +10,7 @@ import { CreateAppointmentRequest, CreateAppointmentResponse } from '../interfac
 import { ChangeDayStatusRequest, ChangeDayStatusResponse } from '../interfaces/change-day-status';
 import { RescheduleRequest, RescheduleResponse } from '../interfaces/reschedule';
 import { RescheduleAppointment } from '../interfaces/appointmentmodel';
+import { HistoryResponse } from '../interfaces/history';
 
 @Injectable({
   providedIn: 'root'
@@ -20,15 +21,18 @@ export class AppointmentService {
   constructor(private http: HttpClient, private authService: AuthService) { }
 
   // جلب كل المواعيد
-  getAppointments(): Observable<Appointment[]> {
-    const token = this.authService.getToken();
+// جلب كل المواعيد (مع count)
+getAppointments(): Observable<DashboardResponse> {
+  const token = this.authService.getToken();
 
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`
+  });
 
-    return this.http.get<Appointment[]>(this.apiUrl, { headers });
-  }
+  return this.http.get<DashboardResponse>(this.apiUrl, { headers });
+}
+
+
 
   // appointment.service.ts
 completeAppointment(appointmentId: number, status: number = 1) {
@@ -193,6 +197,29 @@ private apiUrl2 = 'https://amiramohsenclinic.com/api/Dashboard/reschedule-other-
     );
   }
   
+
+
+
+
+
+private historyUrl = 'https://amiramohsenclinic.com/api/Dashboard/appointments/archive';
+
+// 🟢 إحضار كل الحجوزات (مع فلتر بتاريخ)
+getHistoryAppointments(token: string, date?: string): Observable<HistoryResponse> {
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token}`
+  });
+
+  let params = new HttpParams();
+
+  // لو فيه فلتر بتاريخ (yyyy-MM-dd)
+  if (date) {
+    params = params.set('date', date);
+  }
+
+  return this.http.get<HistoryResponse>(this.historyUrl, { headers, params });
+}
+
 
 
 
