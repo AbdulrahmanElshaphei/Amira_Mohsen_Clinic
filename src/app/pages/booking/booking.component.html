@@ -10,11 +10,18 @@
   </nav>
 
 <header class="py-5">
-
+        <!-- Offers -->
+  <div class="offer-section text-center py-3 mt-5">
+    <h3 class="fw-bold fs-4 mb-3 edit-textitle ">مواعيد عمل العيادة</h3>
+    <p class="fs-6">السبت، الأحد، الثلاثاء، الأربعاء — 11:30ص | 10:00م </p>
+  </div>
 
   <section class="page">
+    
     <div class="card">
       <h1 class="title">الحجز</h1>
+
+
 
       <form class="form" (ngSubmit)="onSubmit()" #bookingForm="ngForm" novalidate>
         <!-- الاسم -->
@@ -102,7 +109,7 @@
       </div>
 
       <!-- نتيجة الحجز -->
-      <div *ngIf="responseData" class="success mt-3">
+      <!-- <div *ngIf="responseData" class="success mt-3">
         <h3>تم الحجز بنجاح ✅</h3>
         <p>الاسم: {{ responseData.patientName }}</p>
         <p>نوع الزيارة: {{ responseData.appointmentType }}</p>
@@ -111,7 +118,7 @@
         <p>الوقت المتوقع: {{ responseData.displayEstimatedTime || responseData.estimatedTime }}</p>
         <p>الحالة: {{ responseData.status }}</p>
         <p>الهاتف المعتمد: {{ responseData.phone }}</p>
-      </div>
+      </div> -->
     </div>
   </section>
 </header>

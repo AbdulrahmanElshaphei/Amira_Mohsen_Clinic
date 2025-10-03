@@ -56,7 +56,7 @@ header{
 .card {
   width: 420px;
   max-width: 94%;
-  padding: 60px 30px;
+  padding: 40px 30px;
   border-radius: 26px;
   background: rgba(255, 255, 255, 0.92);
   box-shadow: 0 18px 40px rgba(18, 12, 9, 0.14);
@@ -74,6 +74,13 @@ header{
   outline: none;
   box-shadow: 0 0 0 2px #406A84;
   border-radius: 6px;
+}
+
+
+.offer-section {
+  background: #f9f3e6;
+  border-top: 4px solid #c29f47;
+  border-bottom: 4px solid #c29f47;
 }
 
 
