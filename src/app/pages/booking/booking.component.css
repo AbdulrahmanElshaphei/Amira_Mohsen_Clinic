@@ -125,7 +125,7 @@ input[type="tel"], select {
 }
 
 input::placeholder {
-  color: #c9c8c8;
+  color: #999;
 }
 
 .select input {
