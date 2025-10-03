@@ -377,10 +377,10 @@
             <table aria-label="قائمة الأقسام" class="table ">
                 <thead>
                     <tr>
-                        <th class="chk-col">
+                        <!-- <th class="chk-col">
                             <input type="checkbox" id="selectAll" title="تحديد الكل" [checked]="isAllSelected()"
                                 (change)="toggleAll(getChecked($event))" />
-                        </th>
+                        </th> -->
                         <th style="text-align: center">الاسم</th>
                         <th style="text-align: right">الهاتف</th>
                         <th style="text-align: center">الحالة</th>
@@ -393,10 +393,10 @@
                 <tbody id="tableBody">
                     <tr *ngFor="let r of rows">
                         <!-- ✅ عمود التشيك بوكس -->
-                        <td class="chk-col">
+                        <!-- <td class="chk-col">
                             <input type="checkbox" [checked]="selectedRows.has(r.id)"
                                 (change)="toggleRow(r.id, getChecked($event))" />
-                        </td>
+                        </td> -->
 
                         <!-- الاسم + الأيقونة -->
                         <td style="text-align: center">

@@ -489,18 +489,18 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
 
   // 🔹 checkbox
-  getChecked(event: Event): boolean {
-    return (event.target as HTMLInputElement)?.checked ?? false;
-  }
-  toggleRow(id: number, checked: boolean) {
-    if (checked) this.selectedRows.add(id);
-    else this.selectedRows.delete(id);
-  }
-  toggleAll(checked: boolean) {
-    if (checked) this.selectedRows = new Set(this.rows.map(r => r.id));
-    else this.selectedRows.clear();
-  }
-  isAllSelected(): boolean {
-    return this.rows.length > 0 && this.selectedRows.size === this.rows.length;
-  }
+  // getChecked(event: Event): boolean {
+  //   return (event.target as HTMLInputElement)?.checked ?? false;
+  // }
+  // toggleRow(id: number, checked: boolean) {
+  //   if (checked) this.selectedRows.add(id);
+  //   else this.selectedRows.delete(id);
+  // }
+  // toggleAll(checked: boolean) {
+  //   if (checked) this.selectedRows = new Set(this.rows.map(r => r.id));
+  //   else this.selectedRows.clear();
+  // }
+  // isAllSelected(): boolean {
+  //   return this.rows.length > 0 && this.selectedRows.size === this.rows.length;
+  // }
 }
