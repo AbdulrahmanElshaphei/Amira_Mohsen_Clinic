@@ -47,7 +47,7 @@ export class BookingComponent implements AfterViewInit {
 
 ngAfterViewInit(): void {
   if (isPlatformBrowser(this.platformId) && this.dateInput) {
-    const unlockHour = 22; // الساعة 10 مساءً
+    const unlockHour = 8; // 🕗 الحجز يفتح الساعة 8 الصبح في نفس اليوم
 
     flatpickr(this.dateInput.nativeElement, {
       dateFormat: 'd-m-Y',
@@ -67,27 +67,27 @@ ngAfterViewInit(): void {
           const selectedDate = selectedDates[0];
           const now = new Date();
 
-          // حساب "بكرة"
-          const tomorrow = new Date();
-          tomorrow.setDate(tomorrow.getDate() + 1);
+          // نجهز نسخة من "الوقت المسموح" = 8 صباحًا في نفس اليوم المختار
+          const unlockTimeForSelectedDay = new Date(selectedDate);
+          unlockTimeForSelectedDay.setHours(unlockHour, 0, 0, 0);
 
-          // لو اختار بكرة ولسه الساعة أقل من unlockHour
-          if (
-            selectedDate.toDateString() === tomorrow.toDateString() &&
-            now.getHours() < unlockHour
-          ) {
-            this.toastr.error(`عذرا سيتم فتح الحجز لليوم التالي في تمام الساعة ${unlockHour}:00 مساءً`)
-            instance.clear(); // امسح الاختيار
+          // ⛔ لو الوقت الحالي أقل من 8 صباحًا في نفس اليوم اللي اختاره المستخدم
+          if (now < unlockTimeForSelectedDay) {
+            this.toastr.error(`عذرًا، سيتم فتح الحجز ليوم ${dateStr} في تمام الساعة ${unlockHour}:00 صباحًا`);
+            instance.clear();
             return;
           }
 
-          // غير كده نخزن التاريخ عادي
+          // ✅ لو عدى 8 الصبح في نفس اليوم المختار، نخزن التاريخ
           this.bookingData.bookingDate = dateStr;
         }
       }
     });
   }
 }
+
+
+
 
 
 
