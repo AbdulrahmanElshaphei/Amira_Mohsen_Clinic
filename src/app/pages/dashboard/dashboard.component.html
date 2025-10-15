@@ -31,64 +31,7 @@
 
         <div class="top-actions-wrap">
             <div class="left-actions">
-                <!-- زرار فتح/إغلاق و تأجيل على الشمال -->
-                <!-- زرار فتح / إغلاق الحجز -->
-                <button class="btn btn-soft" id="toggleBookingBtn" title="فتح أو إغلاق الحجز" data-bs-toggle="modal"
-                    data-bs-target="#changeBookingModal2">
-
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="2" y="7" width="20" height="10" rx="5" stroke="currentColor" stroke-width="1.6" />
-                        <circle cx="9" cy="12" r="3" fill="currentColor" />
-                    </svg>
-
-                    فتح / إغلاق الحجز مع مسح الحجوزات
-                </button>
-
-                <!-- المودال -->
-                <div class="modal fade" id="changeBookingModal2" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-
-                            <!-- Header -->
-                            <div class="modal-header">
-                                <h5 class="modal-title">تغيير حالة الحجز</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="إغلاق"></button>
-                            </div>
-
-                            <!-- Body -->
-                            <div class="modal-body">
-                                <div class="alert alert-warning text-center" role="alert">
-                                    يمكنك فتح أو إغلاق الحجز لليوم الحالي أو لليوم التالي فقط
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="day" class="form-label">اليوم</label>
-                                    <input type="date" class="form-control" id="day" [(ngModel)]="selectedDay"
-                                        name="day">
-                                </div>
-
-                                <div *ngIf="statusMessage" class="alert text-center"
-                                    [ngClass]="{'alert-success': statusSuccess, 'alert-danger': !statusSuccess}">
-                                    {{ statusMessage }}
-                                </div>
-                            </div>
-
-                            <!-- Footer -->
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-success" (click)="changeDayStatus(false)"
-                                    data-bs-dismiss="modal">
-                                    فتح الحجز
-                                </button>
-
-                                <button type="button" class="btn-close-book" (click)="changeDayStatus(true)"
-                                    data-bs-dismiss="modal">
-                                    إغلاق الحجز
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            
 
 
 
@@ -103,7 +46,7 @@
                         <rect x="2" y="7" width="20" height="10" rx="5" stroke="currentColor" stroke-width="1.6" />
                         <circle cx="9" cy="12" r="3" fill="currentColor" />
                     </svg>
-                    فتح / إغلاق الحجز بدون مسح الحجوزات
+                    فتح / إغلاق الحجز
                 </button>
 
                 <!-- المودال -->
@@ -302,6 +245,69 @@
                         </div>
                     </div>
                 </div>
+
+
+
+
+                    <!-- زرار فتح/إغلاق و تأجيل على الشمال -->
+                <!-- زرار فتح / إغلاق الحجز -->
+                <button class="btn btn-soft" id="toggleBookingBtn" title="فتح أو إغلاق الحجز" data-bs-toggle="modal"
+                    data-bs-target="#changeBookingModal2">
+
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="2" y="7" width="20" height="10" rx="5" stroke="currentColor" stroke-width="1.6" />
+                        <circle cx="9" cy="12" r="3" fill="currentColor" />
+                    </svg>
+
+                    فتح / إغلاق الحجز<span class="text-danger fw-bolder with-edit">مع</span>مسح الحجوزات
+                </button>
+
+                <!-- المودال -->
+                <div class="modal fade" id="changeBookingModal2" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+
+                            <!-- Header -->
+                            <div class="modal-header">
+                                <h5 class="modal-title">تغيير حالة الحجز</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="إغلاق"></button>
+                            </div>
+
+                            <!-- Body -->
+                            <div class="modal-body">
+                                <div class="alert alert-warning text-center" role="alert">
+                                    يمكنك فتح أو إغلاق الحجز لليوم الحالي أو لليوم التالي فقط
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="day" class="form-label">اليوم</label>
+                                    <input type="date" class="form-control" id="day" [(ngModel)]="selectedDay"
+                                        name="day">
+                                </div>
+
+                                <div *ngIf="statusMessage" class="alert text-center"
+                                    [ngClass]="{'alert-success': statusSuccess, 'alert-danger': !statusSuccess}">
+                                    {{ statusMessage }}
+                                </div>
+                            </div>
+
+                            <!-- Footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-success" (click)="changeDayStatus(false)"
+                                    data-bs-dismiss="modal">
+                                    فتح الحجز
+                                </button>
+
+                                <button type="button" class="btn-close-book" (click)="changeDayStatus(true)"
+                                    data-bs-dismiss="modal">
+                                    إغلاق الحجز
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
 
                 <!-- <button class="btn btn-ghost" data-bs-toggle="modal" data-bs-target="#changeBookingModal"
                     title="تغيير ميعاد بداية / قفل الحجز">
