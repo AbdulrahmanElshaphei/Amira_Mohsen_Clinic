@@ -1,6 +1,6 @@
-header{
-    background-color: #406A84;
-    font-family: "Almarai", sans-serif; 
+header {
+  background-color: #406A84;
+  font-family: "Almarai", sans-serif;
 }
 
 /* روابط علوية */
@@ -16,12 +16,12 @@ header{
   z-index: 9999;
 }
 
-.top-links .text{
-    font-size: 16px;
+.top-links .text {
+  font-size: 16px;
 }
 
-.top-links .arrow{
-    font-size: 18px;
+.top-links .arrow {
+  font-size: 18px;
 }
 
 .nav-link {
@@ -108,7 +108,8 @@ header{
 }
 
 input[type="text"],
-input[type="tel"], select {
+input[type="tel"],
+select {
   flex: 1;
   height: 48px;
   padding: 10px 14px;
@@ -139,7 +140,8 @@ input::placeholder {
 .date-row {
   display: flex;
   align-items: center;
-  gap: 8px; /* مسافة صغيرة بين الأيقونة والإنبوت */
+  gap: 8px;
+  /* مسافة صغيرة بين الأيقونة والإنبوت */
   border-radius: 6px;
   cursor: pointer;
 }
@@ -173,10 +175,10 @@ input::placeholder {
   transition: all 0.3s ease-in-out;
 }
 
-.btn:hover{
-    background: linear-gradient(180deg, #eceaea, #fff);
-    color: #406A84;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+.btn:hover {
+  background: linear-gradient(180deg, #eceaea, #fff);
+  color: #406A84;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
 }
 
 /* Responsive */
@@ -207,16 +209,18 @@ input::placeholder {
   padding: 8px 12px;
   font-size: 15px;
   width: 100%;
-  appearance: none;          
-  -webkit-appearance: none;  
-  -moz-appearance: none;     
-  text-align: right;         
-  color: #999; /* افتراضي رمادي */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-align: right;
+  color: #999;
+  /* افتراضي رمادي */
 }
 
 /* لو المستخدم اختار حاجة غير الافتراضي */
 .date-input:valid {
-  color: #000; /* تتحول لأسود */
+  color: #000;
+  /* تتحول لأسود */
 }
 
 /* يخفي السهم في إنترنت إكسبلورر/Edge القديم */
@@ -224,3 +228,70 @@ input::placeholder {
   display: none;
 }
 
+
+
+
+
+
+
+.alert-bar {
+  background-color: transparent;
+  /* الخلفية البنية */
+  padding: 10px 0;
+  direction: rtl;
+}
+
+.alert-content {
+  display: flex;
+  align-items: center;
+  background-color: #f2f2f2;
+  /* المستطيل الفاتح */
+  margin: 0 25px;
+  position: relative;
+  overflow: hidden;
+  height: 40px;
+  border-radius: 4px;
+}
+
+.alert-title {
+  background-color: red;
+  /* البرتقالي */
+  color: white;
+  padding: 8px 16px;
+  font-weight: bold;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  z-index: 2;
+}
+
+.alert-text {
+  flex: 1;
+  overflow: hidden;
+  margin-right: 120px;
+  /* مساحة للعنوان */
+  position: relative;
+}
+
+.scroll-text {
+  display: inline-block;
+  white-space: nowrap;
+  color: #000;
+  font-size: 16px;
+  font-weight: 500;
+  animation: marquee 15s linear infinite;
+}
+
+/* الحركة */
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
