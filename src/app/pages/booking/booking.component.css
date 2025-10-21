@@ -278,6 +278,13 @@ input::placeholder {
   word-wrap: break-word;
 }
 
+/* 📅 شكل وتباعد التاريخ */
+.date {
+  margin: 0 12px; /* المسافة قبل وبعد التاريخ */
+  font-weight: bold;
+  color: #222;
+}
+
 /* 📱 تجاوب ممتاز على كل الشاشات */
 @media (max-width: 768px) {
   .alert-content {
@@ -297,5 +304,9 @@ input::placeholder {
     margin: 0;
     text-align: center;
     font-size: 15px;
+  }
+  
+  .date {
+    margin: 0 8px;
   }
 }
