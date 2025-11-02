@@ -224,4 +224,28 @@ ngAfterViewInit(): void {
 
     });
   }
+
+
+
+
+validatePhone(event: any) {
+  let value = event.target.value;
+
+  // إزالة أي رموز أو حروف غير الأرقام أو +
+  value = value.replace(/[^0-9+]/g, '');
+
+  // السماح بـ + واحدة فقط في البداية
+  if ((value.match(/\+/g) || []).length > 1) {
+    value = value.replace(/\+(?=.+\+)/g, '');
+  }
+  if (value.includes('+') && !value.startsWith('+')) {
+    value = value.replace('+', '');
+  }
+
+  // تحديث القيمة في الـ ngModel
+  event.target.value = value;
+  this.bookingData.phone = value;
+}
+
+
 }
