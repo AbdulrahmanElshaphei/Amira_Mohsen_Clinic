@@ -27,7 +27,7 @@ export class BookingComponent implements AfterViewInit {
     name: '',
     phone: '',
     bookingDate: '', // قد يأتي 'd-m-Y' أو 'Y-m-d' بحسب إعداد flatpickr — سنعالجه قبل الإرسال
-    appointmentType:''
+    appointmentType: ''
   };
 
   // النتيجة المعالجة للعرض
@@ -42,49 +42,49 @@ export class BookingComponent implements AfterViewInit {
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private appointmentService: AppointmentService,
-    private toastr:ToastrService
+    private toastr: ToastrService
   ) { }
 
-ngAfterViewInit(): void {
-  if (isPlatformBrowser(this.platformId) && this.dateInput) {
-    const unlockHour = 8; // 🕗 الحجز يفتح الساعة 8 الصبح في نفس اليوم
+  ngAfterViewInit(): void {
+    if (isPlatformBrowser(this.platformId) && this.dateInput) {
+      const unlockHour = 8; // 🕗 الحجز يفتح الساعة 8 الصبح في نفس اليوم
 
-    flatpickr(this.dateInput.nativeElement, {
-      dateFormat: 'd-m-Y',
-      locale: Arabic,
-      disableMobile: true,
-      defaultDate: new Date(),
-      minDate: 'today',
-      disable: [
-        (date: Date) => {
-          const day = date.getDay();
-          // السماح فقط بالسبت(6) والأحد(0) والتلات(2) والأربع(3)
-          return !(day === 6 || day === 0 || day === 2 || day === 3);
-        }
-      ],
-      onChange: (selectedDates: Date[], dateStr: string, instance) => {
-        if (selectedDates.length > 0) {
-          const selectedDate = selectedDates[0];
-          const now = new Date();
-
-          // نجهز نسخة من "الوقت المسموح" = 8 صباحًا في نفس اليوم المختار
-          const unlockTimeForSelectedDay = new Date(selectedDate);
-          unlockTimeForSelectedDay.setHours(unlockHour, 0, 0, 0);
-
-          // ⛔ لو الوقت الحالي أقل من 8 صباحًا في نفس اليوم اللي اختاره المستخدم
-          if (now < unlockTimeForSelectedDay) {
-            this.toastr.error(`عذرًا، سيتم فتح الحجز ليوم ${dateStr} في تمام الساعة ${unlockHour}:00 صباحًا`);
-            instance.clear();
-            return;
+      flatpickr(this.dateInput.nativeElement, {
+        dateFormat: 'd-m-Y',
+        locale: Arabic,
+        disableMobile: true,
+        defaultDate: new Date(),
+        minDate: 'today',
+        disable: [
+          (date: Date) => {
+            const day = date.getDay();
+            // السماح فقط بالسبت(6) والأحد(0) والتلات(2) والأربع(3)
+            return !(day === 6 || day === 0 || day === 2 || day === 3);
           }
+        ],
+        onChange: (selectedDates: Date[], dateStr: string, instance) => {
+          if (selectedDates.length > 0) {
+            const selectedDate = selectedDates[0];
+            const now = new Date();
 
-          // ✅ لو عدى 8 الصبح في نفس اليوم المختار، نخزن التاريخ
-          this.bookingData.bookingDate = dateStr;
+            // نجهز نسخة من "الوقت المسموح" = 8 صباحًا في نفس اليوم المختار
+            const unlockTimeForSelectedDay = new Date(selectedDate);
+            unlockTimeForSelectedDay.setHours(unlockHour, 0, 0, 0);
+
+            // ⛔ لو الوقت الحالي أقل من 8 صباحًا في نفس اليوم اللي اختاره المستخدم
+            if (now < unlockTimeForSelectedDay) {
+              this.toastr.error(`عذرًا، سيتم فتح الحجز ليوم ${dateStr} في تمام الساعة ${unlockHour}:00 صباحًا`);
+              instance.clear();
+              return;
+            }
+
+            // ✅ لو عدى 8 الصبح في نفس اليوم المختار، نخزن التاريخ
+            this.bookingData.bookingDate = dateStr;
+          }
         }
-      }
-    });
+      });
+    }
   }
-}
 
 
 
@@ -167,6 +167,11 @@ ngAfterViewInit(): void {
     return hhmm;
   }
 
+  nameError: string | null = null;
+  onNameChange() {
+    this.nameError = null; // أي تعديل في الاسم يمسح الرسالة السابقة
+  }
+
   // ===== submit =====
   onSubmit() {
     this.errorMessage = '';
@@ -210,17 +215,18 @@ ngAfterViewInit(): void {
         this.isLoading = false;
       },
       error: (err) => {
-
-        // ✅ استخرج الرسالة الحقيقية لو موجودة
-        const serverMsg =
-          err?.error?.statusMessage || // الرسالة اللي بترجع من الـ API
-          err?.error?.message ||       // fallback لو السيرفر بيرجع message بس
-          err?.message ||              // لو error عام من Angular/HTTP
-          'حصل خطأ من السيرفر';        // fallback أخير
-
-        this.errorMessage = `⚠️ ${serverMsg}`;
         this.isLoading = false;
+
+        const serverMsg = err?.error?.statusMessage || err?.error?.message || err?.message || 'حصل خطأ من السيرفر';
+
+        // لو الرسالة متعلقة بالاسم، نحطها في nameError
+        if (serverMsg.includes('اسم')) { // ممكن تعدل الشرط حسب نص الرسالة من الباك اند
+          this.nameError = `⚠️ ${serverMsg}`;
+        } else {
+          this.errorMessage = `⚠️ ${serverMsg}`;
+        }
       }
+
 
     });
   }
@@ -228,24 +234,24 @@ ngAfterViewInit(): void {
 
 
 
-validatePhone(event: any) {
-  let value = event.target.value;
+  validatePhone(event: any) {
+    let value = event.target.value;
 
-  // إزالة أي رموز أو حروف غير الأرقام أو +
-  value = value.replace(/[^0-9+]/g, '');
+    // إزالة أي رموز أو حروف غير الأرقام أو +
+    value = value.replace(/[^0-9+]/g, '');
 
-  // السماح بـ + واحدة فقط في البداية
-  if ((value.match(/\+/g) || []).length > 1) {
-    value = value.replace(/\+(?=.+\+)/g, '');
+    // السماح بـ + واحدة فقط في البداية
+    if ((value.match(/\+/g) || []).length > 1) {
+      value = value.replace(/\+(?=.+\+)/g, '');
+    }
+    if (value.includes('+') && !value.startsWith('+')) {
+      value = value.replace('+', '');
+    }
+
+    // تحديث القيمة في الـ ngModel
+    event.target.value = value;
+    this.bookingData.phone = value;
   }
-  if (value.includes('+') && !value.startsWith('+')) {
-    value = value.replace('+', '');
-  }
-
-  // تحديث القيمة في الـ ngModel
-  event.target.value = value;
-  this.bookingData.phone = value;
-}
 
 
 }

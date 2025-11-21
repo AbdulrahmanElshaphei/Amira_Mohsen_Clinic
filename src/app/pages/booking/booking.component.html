@@ -51,13 +51,19 @@
               <circle cx="12" cy="7" r="4"></circle>
             </svg>
           </div>
-          <input type="text" class="date-input" placeholder="الاسم كامل" [(ngModel)]="bookingData.name" name="name"
-            required minlength="3" #name="ngModel" />
+          <input type="text" class="date-input" placeholder="الاسم ثلاثي" [(ngModel)]="bookingData.name" name="name"
+            required minlength="3" #name="ngModel" (input)="onNameChange()" />
         </div>
+
         <div *ngIf="name.invalid && (name.dirty || name.touched)" class="error">
           <small *ngIf="name.errors?.['required']">⚠️ الاسم مطلوب</small>
           <small *ngIf="name.errors?.['minlength']">⚠️ الاسم لا يقل عن 3 حروف</small>
         </div>
+
+        <div *ngIf="nameError" class="error">
+          <small>{{ nameError }}</small>
+        </div>
+
 
         <!-- الهاتف -->
         <!-- <div class="row">
