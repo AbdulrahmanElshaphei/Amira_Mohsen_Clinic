@@ -12,6 +12,7 @@ import { RescheduleRequest, RescheduleResponse } from '../interfaces/reschedule'
 import { RescheduleAppointment } from '../interfaces/appointmentmodel';
 import { HistoryResponse } from '../interfaces/history';
 import { DeleteHistoryResponse } from '../interfaces/delete-history';
+import { DeleteByPatient } from '../interfaces/delete-by-patient';
 
 @Injectable({
   providedIn: 'root'
@@ -238,6 +239,24 @@ deleteAppointmentsByDate(token: string, date: string): Observable<DeleteHistoryR
 }
 
 
+
+
+
+
+private baseUrl = 'https://amiramohsenclinic.com/api/Appointments';
+
+
+  cancelByPatient(phone: string, date: string): Observable<DeleteByPatient> {
+    let params = new HttpParams()
+      .set('phoneNumber', phone)
+      .set('date', date);
+
+    return this.http.post<DeleteByPatient>(
+      `${this.baseUrl}/cancel-by-patient`,
+      {},   // body فاضي
+      { params }
+    );
+  }
 
 
 }

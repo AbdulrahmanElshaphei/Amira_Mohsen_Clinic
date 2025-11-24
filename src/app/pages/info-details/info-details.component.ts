@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AppointmentService } from '../../shared/services/appointment.service';
 import { AppointmentInfo } from '../../shared/interfaces/appointment-info';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-info-details',
@@ -19,7 +20,8 @@ export class InfoDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private appointmentService: AppointmentService
+    private appointmentService: AppointmentService,
+    private toastr: ToastrService
   ) {}
 
   private normalizePhone(phone: string) {
@@ -58,4 +60,32 @@ export class InfoDetailsComponent implements OnInit {
       }
     });
   }
+
+
+
+
+
+
+cancelBooking() {
+  if (!this.booking) return;
+
+  const phone = this.booking.phone;
+
+  // التاريخ النصي الأصلي بدون أي تحويل
+  const dateForApi = this.booking.date.replace('Z', '');
+
+  console.log("Sending to cancel API:", dateForApi);
+
+  this.appointmentService.cancelByPatient(phone, dateForApi).subscribe({
+    next: () => {
+      this.toastr.success('تم إلغاء حجزك بنجاح');
+      this.booking!.status = 'Cancelled';
+    },
+    error: () => {
+      this.toastr.error('حدث خطأ أثناء إلغاء الحجز');
+    }
+  });
+}
+
+
 }
