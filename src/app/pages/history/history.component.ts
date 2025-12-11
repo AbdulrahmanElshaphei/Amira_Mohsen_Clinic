@@ -40,6 +40,10 @@ export class HistoryComponent implements OnInit {
     this.appointmentService.getHistoryAppointments(token, date).subscribe({
       next: (res: HistoryResponse) => {
         this.appointments = res.appointments;
+        
+        // 🔢 ترتيب حسب رقم الدور (تصاعدي)
+        this.appointments.sort((a, b) => Number(a.queueNumber) - Number(b.queueNumber));
+
         this.filteredAppointments = res.appointments;
         this.totalCount = res.count; // ✅ ناخد الكونت اللي جاي من السيرفر
       },
