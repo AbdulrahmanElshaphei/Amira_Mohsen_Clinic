@@ -136,7 +136,7 @@
                                         <select class="form-select" id="appointmentId"
                                             [(ngModel)]="selectedAppointmentId" name="appointmentId">
                                             <option *ngFor="let app of rows" [value]="app.id">
-                                                {{ app.patientName }} - {{ app.date }} - {{ app.estimatedTime }}
+                                                {{ app.patientName }} - {{ app.estimatedTime | date:'yyyy-MM-dd' }} - {{ app.estimatedTime | date:'hh:mm a' }}
                                             </option>
                                         </select>
                                     </div>
@@ -218,7 +218,7 @@
                                         <select class="form-select" id="appointmentIdOtherDay"
                                             [(ngModel)]="selectedAppointmentIdOtherDay" name="appointmentIdOtherDay">
                                             <option *ngFor="let app of rows" [value]="app.id">
-                                                {{ app.patientName }} - {{ app.date }} - {{ app.estimatedTime }}
+                                                {{ app.patientName }} - {{ app.estimatedTime | date:'yyyy-MM-dd' }} - {{ app.estimatedTime | date:'hh:mm a' }}
                                             </option>
                                         </select>
                                     </div>
@@ -479,10 +479,13 @@
                         </td>
                         <td style="text-align: center">
                             <span style="direction: ltr; unicode-bidi: embed;">
-                                {{ r.estimatedTime }}
+                                <td>{{ r.estimatedTime | date:'hh:mm a' }}</td>
                             </span>
                         </td>
-                        <td style="text-align: center">{{ r.date }}</td>
+                        <!-- <td style="text-align: center">{{ r.date }}</td> -->
+                        <td style="text-align: center">
+                            {{ r.estimatedTime | date:'yyyy-MM-dd' }}
+                        </td>
                         <td style="text-align: center">{{ r.appointmentType }}</td>
                         <td class="right-col">{{ r.queueNumber }}</td>
 
