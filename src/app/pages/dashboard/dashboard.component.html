@@ -378,7 +378,66 @@
                 </div>
 
 
-                
+
+
+
+
+                <!-- زرار إضافة تنبيه -->
+                <button class="btn btn-ghost" data-bs-toggle="modal" data-bs-target="#notificationModal"
+                    title="إضافة تنبيه للمرضى">
+
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 0 0 2 2z" fill="currentColor" />
+                        <path d="M18 16v-5a6 6 0 1 0-12 0v5l-2 2v1h16v-1l-2-2z" stroke="currentColor" stroke-width="2"
+                            fill="none" />
+                    </svg>
+
+                    إضافة تنبيه
+                </button>
+
+                <!-- المودال -->
+                <div class="modal fade" id="notificationModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+
+                            <!-- Header -->
+                            <div class="modal-header">
+                                <h5 class="modal-title">إضافة تنبيه للمرضى</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+
+                            <!-- Body -->
+                            <div class="modal-body">
+
+                                <div class="mb-3">
+                                    <label class="form-label">نص الرسالة</label>
+                                    <textarea class="form-control" rows="4" [(ngModel)]="notificationMessage"
+                                        name="notificationMessage" placeholder="اكتب التنبيه هنا..."></textarea>
+                                </div>
+
+                                <!-- عرض رسالة نجاح أو خطأ -->
+                                <div *ngIf="modalMessage2" class="alert mt-2"
+                                    [ngClass]="modalSuccess2 ? 'alert-success' : 'alert-danger'">
+                                    {{ modalMessage2 }}
+                                </div>
+
+                            </div>
+
+                            <!-- Footer -->
+                            <div class="modal-footer">
+
+                                <button type="button" class="btn-close-book" (click)="deleteNotification()">
+                                    حذف الرسالة
+                                </button>
+
+                                <button type="button" class="btn btn-primary text-white" (click)="saveNotification()">
+                                    حفظ
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>

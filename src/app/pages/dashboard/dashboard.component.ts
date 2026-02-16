@@ -12,6 +12,7 @@ import { ChangeDayStatusRequest } from '../../shared/interfaces/change-day-statu
 import { RescheduleRequest } from '../../shared/interfaces/reschedule';
 import flatpickr from "flatpickr";
 import { RescheduleAppointment } from '../../shared/interfaces/appointmentmodel';
+import { NotificationService } from '../../shared/services/notification.service';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -47,12 +48,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   constructor(
     private appointmentService: AppointmentService,
     private toastr: ToastrService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
     this.loadAppointments();
     this.checkWeeklyAlert();
+    this.loadCurrentAnnouncement();
     const saved = localStorage.getItem('rescheduledAppointmentsDay');
     if (saved) {
       this.rescheduledAppointmentsDay = JSON.parse(saved);
@@ -400,9 +403,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
 
     const payload: RescheduleRequest = {
-      appointmentId: this.selectedAppointmentIdOtherDay,
-      newTime: this.newDateOtherDay
-    };
+  appointmentId: this.selectedAppointmentIdOtherDay,
+  newTime: new Date(this.newDateOtherDay + 'T12:00:00').toISOString()
+};
 
     const token = localStorage.getItem('adminToken') || '';
 
@@ -423,6 +426,92 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     });
 
   }
+
+
+// اضافه تنبيه
+
+  notificationMessage: string = '';
+  modalMessage2: string = '';
+  modalSuccess2: boolean = false;
+  currentNotificationId: number | null = null; // هنستخدمه لما تبعتلي شكل الـ API
+
+saveNotification() {
+
+  // 🚫 لو فيه رسالة موجودة بالفعل
+  if (this.currentNotificationId) {
+    this.modalMessage2 = '⚠️ يوجد رسالة حالياً، يجب حذفها أولاً قبل إضافة رسالة جديدة';
+    this.modalSuccess2 = false;
+    return;
+  }
+
+  if (!this.notificationMessage.trim()) {
+    this.modalMessage2 = '⚠️ من فضلك اكتب رسالة أولا';
+    this.modalSuccess2 = false;
+    return;
+  }
+
+  this.notificationService.addAnnouncement(this.notificationMessage)
+    .subscribe({
+      next: (res) => {
+
+        this.currentNotificationId = res.id; // نحفظ الـ id
+        // this.modalMessage2 = '✅ تم حفظ الرسالة بنجاح';
+        this.toastr.success('✅ تم حفظ الرسالة بنجاح');
+        this.modalSuccess2 = true;
+
+      },
+      error: (err) => {
+        console.error(err);
+        this.toastr.error('❌ حدث خطأ أثناء حفظ الرسالة');
+        // this.modalMessage2 = '❌ حدث خطأ أثناء حفظ الرسالة';
+        this.modalSuccess2 = false;
+      }
+    });
+}
+
+
+deleteNotification() {
+
+  if (!this.currentNotificationId) {
+    this.modalMessage = 'لا توجد رسالة لحذفها';
+    this.modalSuccess = false;
+    return;
+  }
+
+  this.notificationService.deleteAnnouncement(this.currentNotificationId)
+    .subscribe({
+      next: () => {
+
+        this.notificationMessage = '';
+        this.currentNotificationId = null;
+
+        // this.modalMessage = '🗑️ تم حذف الرسالة بنجاح';
+        this.toastr.success('🗑️ تم حذف الرسالة بنجاح');
+        this.modalSuccess = true;
+
+      },
+      error: (err) => {
+        console.error(err);
+        // this.modalMessage = '❌ حدث خطأ أثناء الحذف';
+        this.toastr.error('❌ حدث خطأ أثناء الحذف');
+        this.modalSuccess = false;
+      }
+    });
+}
+
+loadCurrentAnnouncement() {
+  this.notificationService.getAnnouncements().subscribe({
+    next: (res) => {
+      if (res.length > 0) {
+        const last = res[res.length - 1];
+        this.notificationMessage = last.message;
+        this.currentNotificationId = last.id;
+      }
+    }
+  });
+}
+
+
 
 
 

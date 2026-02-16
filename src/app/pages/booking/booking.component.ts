@@ -11,6 +11,7 @@ import { AppointmentService } from '../../shared/services/appointment.service';
 // واجهات الطلب والرد (مسار الملف حسب مشروعك - عدل لو لازم)
 import { CreateAppointmentRequest, CreateAppointmentResponse } from '../../shared/interfaces/create-appointment';
 import { ToastrService } from 'ngx-toastr';
+import { NotificationService } from '../../shared/services/notification.service';
 
 @Component({
   selector: 'app-booking',
@@ -42,7 +43,8 @@ export class BookingComponent implements AfterViewInit {
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private appointmentService: AppointmentService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private notificationService: NotificationService
   ) { }
 
   ngAfterViewInit(): void {
@@ -254,4 +256,27 @@ export class BookingComponent implements AfterViewInit {
   }
 
 
+
+
+
+  announcementMessage: string = '';
+
+ngOnInit(): void {
+  this.loadAnnouncement();
+}
+
+loadAnnouncement() {
+  this.notificationService.getAnnouncements().subscribe({
+    next: (res) => {
+      if (res.length > 0) {
+        this.announcementMessage = res[res.length - 1].message;
+      } else {
+        this.announcementMessage = ''; // مهم جداً
+      }
+    },
+    error: () => {
+      this.announcementMessage = '';
+    }
+  });
+}
 }
