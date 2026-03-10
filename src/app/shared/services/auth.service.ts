@@ -14,20 +14,15 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) {}
 
   // تسجيل الدخول
-  login(): Observable<LoginResponse> {
-    const body = {
-      username: 'Amira_Mohsen_admin',
-      password: 'Amira1234@admin'
-    };
-
-    return this.http.post<LoginResponse>(this.apiUrl, body).pipe(
-      tap((res: LoginResponse) => {
-        if (res.token) {
-          this.setToken(res.token);
-        }
-      })
-    );
-  }
+ login(username: string, password: string): Observable<LoginResponse> {
+  return this.http.post<LoginResponse>(this.apiUrl, { username, password }).pipe(
+    tap(res => {
+      if (res.token) {
+        this.setToken(res.token);
+      }
+    })
+  );
+}
 
   // حفظ التوكن
   private setToken(token: string): void {

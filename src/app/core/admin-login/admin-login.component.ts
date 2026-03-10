@@ -16,10 +16,6 @@ export class AdminLoginComponent {
   loading = false;
   errorMessage = '';
 
-  // القيم الثابتة
-  private readonly correctUsername = 'Amira_Mohsen_admin';
-  private readonly correctPassword = 'Amira1234@admin';
-
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -32,34 +28,26 @@ export class AdminLoginComponent {
   }
 
   onSubmit() {
-    if (this.loginForm.invalid) return;
+  if (this.loginForm.invalid) return;
 
-    const { username, password } = this.loginForm.value;
+  const { username, password } = this.loginForm.value;
 
-    // التحقق من القيم المدخلة
-    if (username !== this.correctUsername || password !== this.correctPassword) {
-      this.errorMessage = '❌ اسم المستخدم أو كلمة المرور غير صحيحة';
-      return;
-    }
+  this.loading = true;
+  this.errorMessage = '';
 
-    this.loading = true;
-    this.errorMessage = '';
-
-    // استدعاء الـ Service (اللي أصلاً بيرسل اليوزر والباسورد الثابتين)
-    this.authService.login().subscribe({
-      next: (res) => {
-        if (res && res.token) {
-          localStorage.setItem('adminToken', res.token);
-          this.router.navigate(['/dashboard']);
-        } else {
-          this.errorMessage = 'فشل تسجيل الدخول';
-        }
-        this.loading = false;
-      },
-      error: () => {
-        this.errorMessage = 'حدث خطأ أثناء تسجيل الدخول';
-        this.loading = false;
+  this.authService.login(username, password).subscribe({
+    next: (res) => {
+      if (res?.token) {
+        this.router.navigate(['/dashboard']);
+      } else {
+        this.errorMessage = '❌ بيانات الدخول غير صحيحة';
       }
-    });
-  }
+      this.loading = false;
+    },
+    error: () => {
+      this.errorMessage = '❌ اسم المستخدم أو كلمة المرور غير صحيحة';
+      this.loading = false;
+    }
+  });
+}
 }
